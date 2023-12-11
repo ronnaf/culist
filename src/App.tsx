@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import kebabCase from "lodash/kebabCase";
 import "./styles.css";
@@ -50,7 +50,7 @@ export default function App() {
     queryFn: async () => {
       const response = await fetch(
         `https://api.clickup.com/api/v2/folder/${sprintsFolder}/list`,
-        { method: "GET", headers: { Authorization: personalToken } }
+        { method: "GET", headers: { Authorization: personalToken } },
       );
       if (!response.ok) throw new Error("Getting lists was not ok");
       return response.json();
@@ -64,7 +64,7 @@ export default function App() {
       const currentSprint = listData.lists[0];
       const response = await fetch(
         `https://api.clickup.com/api/v2/list/${currentSprint.id}/view`,
-        { method: "GET", headers: { Authorization: personalToken } }
+        { method: "GET", headers: { Authorization: personalToken } },
       );
       if (!response.ok) throw new Error("Getting view was not ok");
       return response.json();
@@ -79,7 +79,7 @@ export default function App() {
       const query = new URLSearchParams({ page: "0" }).toString();
       const viewTasks = await fetch(
         `https://api.clickup.com/api/v2/view/${viewId}/task?${query}`,
-        { method: "GET", headers: { Authorization: personalToken } }
+        { method: "GET", headers: { Authorization: personalToken } },
       );
       if (!viewTasks.ok) throw new Error("Getting view task was not ok");
       return viewTasks.json();
@@ -93,8 +93,8 @@ export default function App() {
     (shown.me_mode
       ? taskData?.tasks.filter((task) =>
           task.assignees.find(
-            (assignee) => assignee.username === userData?.user.username
-          )
+            (assignee) => assignee.username === userData?.user.username,
+          ),
         )
       : taskData?.tasks) || [];
 
@@ -102,8 +102,8 @@ export default function App() {
     <div className="App">
       <h1>culist</h1>
       <p>
-        Ronna's handy tool for creating meaningful branch & pull request names
-        based on your clickup tasks
+        Ronna`&apos;`s handy tool for creating meaningful branch & pull request
+        names based on your clickup tasks
       </p>
       <hr />
       <p>hello, {userData?.user.username}!</p>
@@ -141,11 +141,10 @@ export default function App() {
                 ))}{" "}
               {shown.status && (
                 <span style={{ background: task.status.color, color: "white" }}>
-                  [{task.status.status}]
+                  {task.status.status}
                 </span>
               )}{" "}
-              {shown.id && <span>[{task.id}]</span>}{" "}
-              <strong>{task.name}</strong>
+              {shown.id && <span>{task.id}</span>} <strong>{task.name}</strong>
             </div>
             {shown.actions && (
               <ul style={{ color: "gray" }}>

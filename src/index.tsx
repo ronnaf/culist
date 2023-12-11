@@ -1,12 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import {
-  useQuery,
-  useMutation,
-  useQueryClient,
-  QueryClient,
-  QueryClientProvider,
-} from "@tanstack/react-query";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import App from "./App";
 
@@ -21,5 +15,5 @@ root.render(
     <QueryClientProvider client={queryClient}>
       <App />
     </QueryClientProvider>
-  </React.StrictMode>
+  </React.StrictMode>,
 );
