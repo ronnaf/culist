@@ -146,7 +146,8 @@ export default function App() {
                   {task.status.status}
                 </span>
               )}{" "}
-              {shown.id && <span>{task.id}</span>} <strong>{task.name}</strong>
+              {shown.id && <span>[{task.id}]</span>}{" "}
+              <strong>{task.name}</strong>
             </div>
             {shown.actions && (
               <ul style={{ color: "gray" }}>
