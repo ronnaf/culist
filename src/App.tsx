@@ -16,7 +16,7 @@ function getActionButtons(task) {
   return [
     { name: "url", value: task.url },
     { name: "branch", value: branchName },
-    { name: "checkout", value: `git checkout ${branchName}` },
+    { name: "checkout", value: `git checkout -b ${branchName}` },
     { name: "pr", value: `[CU-${task.id}] ${task.name}` },
   ];
 }
