@@ -102,7 +102,7 @@ export default function App() {
     <div className="App">
       <h1>culist</h1>
       <p>
-        Ronna`&apos;`s handy tool for creating meaningful branch & pull request
+        Ronna&apos;s handy tool for creating meaningful branch & pull request
         names based on your clickup tasks
       </p>
       <hr />
