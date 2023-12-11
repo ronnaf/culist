@@ -110,20 +110,22 @@ export default function App() {
       <div>
         current sprint: <strong>{listData?.lists?.[0].name}</strong>
       </div>
-      <div style={{ display: "flex" }}>
+      <div style={{ display: "flex", flexWrap: "wrap" }}>
         <div>show:</div>
         {["assignee", "status", "id", "actions", "me_mode"].map((property) => (
-          <label key={property}>
-            [
-            <input
-              type="checkbox"
-              checked={shown[property]}
-              onChange={() =>
-                setShown((p) => ({ ...p, [property]: !p[property] }))
-              }
-            />
-            {property}]
-          </label>
+          <div key={property}>
+            <label style={{ whiteSpace: "nowrap" }}>
+              [
+              <input
+                type="checkbox"
+                checked={shown[property]}
+                onChange={() =>
+                  setShown((p) => ({ ...p, [property]: !p[property] }))
+                }
+              />
+              {property}]
+            </label>
+          </div>
         ))}
       </div>
       <ul>
@@ -159,7 +161,7 @@ export default function App() {
                       >
                         {action.name}
                       </button>
-                      <div>{action.value}</div>
+                      <div style={{ whiteSpace: "nowrap" }}>{action.value}</div>
                     </div>
                   </li>
                 ))}
