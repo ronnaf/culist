@@ -72,31 +72,42 @@ export default function App() {
     enabled: Boolean(listData?.lists.length),
   });
 
-  const { data: taskData } = useQuery({
+  const { data: tasks } = useQuery({
     queryKey: ["tasks"],
     queryFn: async () => {
       const viewId = viewData.required_views.list.id;
-      const query = new URLSearchParams({ page: "0" }).toString();
-      const viewTasks = await fetch(
-        `https://api.clickup.com/api/v2/view/${viewId}/task?${query}`,
-        { method: "GET", headers: { Authorization: personalToken } },
-      );
-      if (!viewTasks.ok) throw new Error("Getting view task was not ok");
-      return viewTasks.json();
+
+      const tasks = [];
+      let page = 0;
+
+      const getTasks = async () => {
+        const response = await fetch(
+          `https://api.clickup.com/api/v2/view/${viewId}/task?page=${page}`,
+          { method: "GET", headers: { Authorization: personalToken } },
+        );
+        if (!response.ok) throw new Error("Getting view task was not ok");
+        const result = await response.json();
+        tasks.push(...result.tasks);
+        if (!result.last_page) {
+          page += 1;
+          await getTasks();
+        }
+      };
+
+      await getTasks();
+      return tasks;
     },
     enabled: Boolean(viewData),
   });
 
-  console.log("task data", taskData);
-
-  const tasks =
+  const filteredTasks =
     (shown.me_mode
-      ? taskData?.tasks.filter((task) =>
+      ? tasks.filter((task) =>
           task.assignees.find(
             (assignee) => assignee.username === userData?.user.username,
           ),
         )
-      : taskData?.tasks) || [];
+      : tasks) || [];
 
   return (
     <div className="App">
@@ -129,7 +140,7 @@ export default function App() {
         ))}
       </div>
       <ul>
-        {tasks.map((task) => (
+        {filteredTasks.map((task) => (
           <li key={task.id}>
             <div>
               {shown.assignee &&
