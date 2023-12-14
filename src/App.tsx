@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import kebabCase from "lodash/kebabCase";
+
 import "./styles.css";
 
 function getActionButtons(task) {
@@ -14,10 +15,24 @@ function getActionButtons(task) {
   }${kebabCase(task.name)}`;
 
   return [
-    { name: "url", value: task.url },
-    { name: "branch", value: branchName },
-    { name: "checkout", value: `git checkout -b ${branchName}` },
-    { name: "pr", value: `[CU-${task.id}] ${task.name}` },
+    {
+      name: "url",
+      value: task.url,
+      display: (
+        <a
+          href={task.url}
+          target="_blank"
+          rel="noreferrer noopener"
+          style={{ color: "gray", textDecoration: "none" }}
+        >
+          {task.url}
+        </a>
+      ),
+    },
+    { name: "branch name", value: branchName },
+    { name: "new branch", value: `git checkout -b ${branchName}` },
+    { name: "checkout", value: `git checkout ${branchName}` },
+    { name: "pr name", value: `[CU-${task.id}] ${task.name}` },
   ];
 }
 
@@ -157,7 +172,7 @@ export default function App() {
                   {task.status.status}
                 </span>
               )}{" "}
-              {shown.id && <span>[{task.id}]</span>}{" "}
+              {shown.id && <span>[CU-{task.id}]</span>}{" "}
               <strong>{task.name}</strong>
             </div>
             {shown.actions && (
@@ -166,14 +181,16 @@ export default function App() {
                   <li key={action.name}>
                     <div style={{ display: "flex" }}>
                       <button
-                        style={{ marginRight: 8 }}
+                        style={{ marginRight: 8, whiteSpace: "nowrap" }}
                         onClick={() => {
                           navigator.clipboard.writeText(action.value);
                         }}
                       >
                         {action.name}
                       </button>
-                      <div style={{ whiteSpace: "nowrap" }}>{action.value}</div>
+                      <div style={{ whiteSpace: "nowrap" }}>
+                        {action.display ?? action.value}
+                      </div>
                     </div>
                   </li>
                 ))}
